@@ -1,0 +1,2 @@
+# mobu
+motionbuilder scripting
