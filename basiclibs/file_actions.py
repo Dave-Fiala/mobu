@@ -6,11 +6,13 @@ from pyfbsdk import *
 import os
 from glob import glob
 
-sys = FBSystem()
+fb_sys = FBSystem()
 app = FBApplication()
 
 
 def is_fbx_file(file_path):
+    if file_path is None:
+        return False
     if os.path.isfile(file_path) and file_path.lower().endswith('.fbx'):
         return True
     else:
@@ -24,6 +26,9 @@ def get_namespace(current_name):
 
 
 def save_file(file_path, new_scene=False):
-    app.FileSave(file_path)
-    if new_scene:
-        app.FileNew()
+    try:
+        app.FileSave(file_path)
+        if new_scene:
+            app.FileNew()
+    except WindowsError():
+        print('ERROR: failed to save file : {}'.format(file_path))
