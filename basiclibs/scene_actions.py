@@ -10,6 +10,11 @@ fb_sys = FBSystem()
 app = FBApplication()
 
 
+def _get_all_takes():
+    alltakes = fb_sys.Scene.Takes
+    return alltakes
+
+
 def _collect_hierarchy(obj, obj_list):
     obj_list.append(obj)
     if len(obj.Children) > 0 :
@@ -17,15 +22,34 @@ def _collect_hierarchy(obj, obj_list):
             _collect_hierarchy(child, obj_list)
 
 
-def get_asset_joint_hierarchy(index, root_name):
+def get_asset_joint_hierarchy(asset_longname):
     joints = []
     scene_root = fb_sys.Scene.RootModel
     for c in scene_root.Children:
-        asset_longname = index+':'+root_name
         if c.LongName == asset_longname:
             print("FOUND : {}".format(asset_longname))
             _collect_hierarchy(c, joints)
     return joints
+
+
+def rename_take(current_take_name, new_take_name):
+    changed = False
+    all_takes = _get_all_takes()
+    for take in all_takes:
+        if take.Name == current_take_name:
+            take.Name = new_take_name
+            changed = True
+    if changed:
+        print('SUCCESS : changed take name from {} to {}'.format(current_take_name, new_take_name))
+    else:
+        print('ERROR : failed change take name {}'.format(current_take_name))
+    return changed
+
+
+def strip_performer_name_from_take_names(performer_name):
+    all_takes = _get_all_takes()
+    for take in all_takes:
+        take.Name = take.Name.replace('_'+performer_name, '')
 
 
 def characterise_standard_hierarchy(joint_list, char_name, char_namespace):
@@ -54,12 +78,11 @@ def characterise_standard_hierarchy(joint_list, char_name, char_namespace):
     return character
 
 
-def import_raw_anim(anim_path, namespace, takename):
+def import_raw_anim(anim_path, namespace):
     """
     Takes a fresh animation exported from MVN Animate
     :param anim_path: the path to the fbx file
     :param namespace: the namespace you would like to assign on the imported asset
-    :param takename: the asset will be imported into this take (will create a new one if the take doesn't exist)
     :return: true if completed execution
     """
     if not file_actions.is_file_of_type(anim_path, 'fbx'):
