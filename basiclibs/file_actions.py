@@ -1,14 +1,11 @@
-'''
+"""
 library of basic commands that handle directory and file manipulation
-'''
+"""
 
-from pyfbsdk import *
+
 import os
 import glob
 import re
-
-fb_sys = FBSystem()
-app = FBApplication()
 
 
 def is_file_of_type(file_path, ext):
@@ -38,15 +35,6 @@ def get_char_name_from_fbx_name(file_name):
 #     tokens = current_name.split('\\')
 #     last_token = tokens[len(tokens)-1]
 #     return last_token.split('_')[0]
-
-
-def save_file(file_path, new_scene=True):
-    try:
-        app.FileSave(file_path)
-        if new_scene:
-            app.FileNew()
-    except WindowsError():
-        print('ERROR: failed to save file : {}'.format(file_path))
 
 
 def collect_all_files(directory):

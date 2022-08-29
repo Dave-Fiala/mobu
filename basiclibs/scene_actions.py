@@ -1,6 +1,6 @@
-'''
+"""
 library of basic commands that handle scene actions inside motionbuilder
-'''
+"""
 
 from pyfbsdk import *
 import os
@@ -30,6 +30,15 @@ def get_asset_joint_hierarchy(asset_longname):
             print("FOUND : {}".format(asset_longname))
             _collect_hierarchy(c, joints)
     return joints
+
+
+def save_file(file_path, new_scene=True):
+    try:
+        app.FileSave(file_path)
+        if new_scene:
+            app.FileNew()
+    except WindowsError():
+        print('ERROR: failed to save file : {}'.format(file_path))
 
 
 def rename_take(current_take_name, new_take_name):
