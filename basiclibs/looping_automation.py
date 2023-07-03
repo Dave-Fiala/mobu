@@ -1,5 +1,19 @@
 ### looping automation
 
+looping steps:
+
+# 1. get character hips on 0,0
+# 2. use looping direction tool to align the cycle with +Z (or any particular direction)
+# 3. save a full-hierarchy pose of the starting position
+# 4. create the zero-null and the hips null child ( once parented, align the mull child to the hips T + R )
+# 5. duplicate the zero-null hierarchy
+# 6. go to the final frame and align the duplicate zero null ( along travel axis only )
+# 7. create a new layer
+# 8. add a zero-key at the start of the animation
+# 9. go to the end of the animation, and apply the full hierarchy starting pose
+# 10. add a zero key right in the middle of the animation (not full hierarchy... this key doesn't go on the hips)
+# 11. slide the key around to get the best blend
+
 from pyfbsdk import *
 
 
