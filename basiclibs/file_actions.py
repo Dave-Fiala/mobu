@@ -24,12 +24,13 @@ def get_char_name_from_fbx_name(file_name):
     else:
         file_no_extension = os.path.splitext(file_name)[0]
         token = re.search(r'-[0-9][0-9][0-9]_', file_no_extension)
-        if token and token.group() is not None and token.group() != '':
-            char_name = file_no_extension.split(token.group())[1]
-            return char_name
+        if token:
+            if token.group() is not None and token.group() != '':
+                char_name = file_no_extension.split(token.group())[1]
+                return char_name
         else:
-            print('ERROR: failed to parse the file name : {}'.format(file_name))
-            return None
+            print('WARNING : \'character\' supplied as name for file : {}'.format(file_name))
+            return 'character'
 
 
 def get_char_list_from_fbx_file_list(file_list):
