@@ -15,6 +15,26 @@ def _get_all_takes():
     return alltakes
 
 
+def set_global_translation(current_object, translation_vector):
+    current_object.SetVector(translation_vector, FBModelTransformationType.kModelTranslation)
+
+
+def set_global_rotation(current_object, rotation_vector):
+    current_object.SetVector(rotation_vector, FBModelTransformationType.kModelRotation)
+
+
+def get_global_translation(current_object):
+    translation_vector = FBVector3d()
+    current_object.GetVector(translation_vector, FBModelTransformationType.kModelTranslation)
+    return translation_vector
+
+
+def get_global_rotation(current_object):
+    rotation_vector = FBVector3d()
+    current_object.GetVector(rotation_vector, FBModelTransformationType.kModelRotation)
+    return rotation_vector
+
+
 def _collect_hierarchy(obj, obj_list):
     obj_list.append(obj)
     if len(obj.Children) > 0 :
