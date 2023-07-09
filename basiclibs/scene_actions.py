@@ -10,6 +10,11 @@ fb_sys = FBSystem()
 app = FBApplication()
 
 
+def deselect_all():
+    for comp in FBSystem().Scene.Components:
+        comp.Selected = False
+
+
 def _get_all_takes():
     alltakes = fb_sys.Scene.Takes
     return alltakes
@@ -33,6 +38,15 @@ def get_global_rotation(current_object):
     rotation_vector = FBVector3d()
     current_object.GetVector(rotation_vector, FBModelTransformationType.kModelRotation)
     return rotation_vector
+
+
+def get_start_and_end_frame():
+    FBPlayerControl().GotoStart()
+    sf = FBSystem().LocalTime.GetFrame()
+    FBPlayerControl().GotoEnd()
+    FBSystem().Scene.Evaluate()
+    ef = FBSystem().LocalTime.GetFrame()
+    return sf, ef
 
 
 def _collect_hierarchy(obj, obj_list):

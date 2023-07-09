@@ -3,6 +3,19 @@ from pyfbsdk import *
 
 print('sandbox loaded')
 
+def plot_objects(obj_list, visible_only=True):
+    if visible_only:
+        start_frame, end_frame = scene_actions.get_start_and_end_frame()
+        FBPlayerControl().LoopStart = FBTime(0,0,0,start_frame)
+        FBPlayerControl().LoopStop = FBTime(0,0,0,end_frame)
+    plot_interval = FBTime( 0, 0, 0, 1, )
+    current_take = FBSystem().CurrentTake
+    scene_actions.deselect_all()
+    FBSystem().Scene.Evaluate()
+    for i in obj_list:
+        i.Selected = True
+    current_take.PlotTakeOnSelected( plot_interval )
+    
 
 def parent_constrain_a_to_b(obj_a=None, obj_b=None):
     if not obj_a or not obj_b:
@@ -21,7 +34,7 @@ def parent_constrain_a_to_b(obj_a=None, obj_b=None):
 def create_null(null_name, pos=None, rot=None):
     print('creating null:')
     if not pos:
-        pos = FBVactor3d(0,0,0)
+        pos = FBVector3d(0,0,0)
     if not rot:
         rot = FBVector3d(0,0,0)
     new_null = FBModelNull(null_name)
@@ -62,3 +75,8 @@ def just_parent_const():
     object_b = FBFindModelByLabelName('Cube')
     parent_constrain_a_to_b(obj_a=object_a, obj_b=object_b)
 
+def do_plot():
+    lst = FBModelList()
+    FBGetSelectedModels(lst)
+    scene_actions.deselect_all()
+    plot_objects(lst, visible_only=True)
