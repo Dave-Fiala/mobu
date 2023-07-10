@@ -3,6 +3,30 @@ from pyfbsdk import *
 
 print('sandbox loaded')
 
+
+def get_anim_node_test():
+    sn = FBFindModelByLabelName('Skeleton node')
+    tnode = sn.PropertyList.Find('Lcl Translation')
+    txnode = tnode.GetAnimationNode()
+    txf = txnode.Nodes[0].FCurve
+    return txf
+    
+
+def shift_keyframes(fcurve, shift_to, absolute=True):
+    start_frame, end_frame = scene_actions.get_start_and_end_frame()
+    if absolute:
+        shift_to -= start_frame
+    shift_time = FBTime(0,0,0,shift_to)
+    # if we shift backwards we operate from the front of the list
+    if shift_to <= 0:
+        for k in fcurve.Keys:
+            k.Time += shift_time
+    # if we shift forwards we operate from the back of the list 
+    else:
+        for k in reversed(range(0, lenfcurve.Keys)):
+            k.Time += shift_time
+
+
 def plot_objects(obj_list, visible_only=True):
     if visible_only:
         start_frame, end_frame = scene_actions.get_start_and_end_frame()
@@ -32,7 +56,7 @@ def parent_constrain_a_to_b(obj_a=None, obj_b=None):
 
 
 def create_null(null_name, pos=None, rot=None):
-    print('creating null:')
+    print('creating null:{}'.format(null_name))
     if not pos:
         pos = FBVector3d(0,0,0)
     if not rot:
